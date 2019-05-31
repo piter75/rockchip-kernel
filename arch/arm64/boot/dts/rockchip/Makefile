@@ -129,7 +129,19 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-evb-v13-multi-cam-avb.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-evb-v13-multi-cam.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-npu-evb-v10.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-npu-evb-v10-multi-cam.dtb
+dtb-$(CONFIG_ARCH_ROCKCHIP) += rockpi-s-linux.dtb
+
+targets += dtbs dtbs_instal
+targets += $(dtb-y)
+dtstree     := $(srctree)/$(src)
+dtb-$(CONFIG_OF_ALL_DTBS) := $(patsubst $(dtstree)/%.dts,%.dtb, $(wildcard $(dtstree)/*.dts))
 
 always		:= $(dtb-y)
-subdir-y	:= $(dts-dirs)
+subdir-y	:= $(dts-dirs) overlays-rockpis
 clean-files	:= *.dtb
+
+# Enable fixups to support overlays on ROCK Pi platforms
+ifeq ($(CONFIG_ARCH_ROCKCHIP),y)
+	DTC_FLAGS ?= -@ -H epapr
+	dts-dirs += overlays-rockpis
+endif
