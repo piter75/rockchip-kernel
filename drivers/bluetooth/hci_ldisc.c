@@ -470,6 +470,7 @@ static int hci_uart_tty_open(struct tty_struct *tty)
 		BT_ERR("Can't allocate control structure");
 		return -ENFILE;
 	}
+	clear_bit(HCI_UART_PROTO_SET, &hu->flags);
 
 	tty->disc_data = hu;
 	hu->tty = tty;
@@ -512,9 +513,9 @@ static void hci_uart_tty_close(struct tty_struct *tty)
 	if (hdev)
 		hci_uart_close(hdev);
 
-	if (test_and_clear_bit(HCI_UART_PROTO_READY, &hu->flags)) {
-		cancel_work_sync(&hu->write_work);
+	cancel_work_sync(&hu->write_work);
 
+	if (test_and_clear_bit(HCI_UART_PROTO_READY, &hu->flags)) {
 		if (hdev) {
 			if (test_bit(HCI_UART_REGISTERED, &hu->flags))
 				hci_unregister_dev(hdev);
@@ -644,6 +645,7 @@ static int hci_uart_register_dev(struct hci_uart *hu)
 
 	set_bit(HCI_UART_REGISTERED, &hu->flags);
 
+	set_bit(HCI_UART_PROTO_READY, &hu->flags);
 	return 0;
 }
 
