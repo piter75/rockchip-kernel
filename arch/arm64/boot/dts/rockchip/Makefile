@@ -70,5 +70,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-evb-v14-linux.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rockpi-s-linux.dtb
 
 always		:= $(dtb-y)
-subdir-y	:= $(dts-dirs)
+subdir-y	:= $(dts-dirs) overlay
 clean-files	:= *.dtb
