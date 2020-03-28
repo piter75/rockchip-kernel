@@ -336,9 +336,9 @@ int serial8250_request_dma(struct uart_8250_port *p)
 			dma->txchan = NULL;
 		}
 
-		dev_info_ratelimited(p->port.dev, "got rx and tx dma channels\n");
+		dev_dbg_ratelimited(p->port.dev, "got rx and tx dma channels\n");
 	} else {
-		dev_info_ratelimited(p->port.dev, "got rx dma channels only\n");
+		dev_dbg_ratelimited(p->port.dev, "got rx dma channels only\n");
 	}
 
 #ifdef CONFIG_ARCH_ROCKCHIP
